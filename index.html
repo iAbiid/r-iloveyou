@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hey You 💜</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0e0012, #2a0033);
+  color: #ede9fe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Soft sparkling background */
+#sparkle-bg {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: sparkleFade 3s infinite alternate;
+}
+
+@keyframes sparkleFade {
+  0% { opacity: 0.05; }
+  50% { opacity: 0.2; }
+  100% { opacity: 0.05; }
+}
+
+/* Card styling */
+.card {
+  background: #0a000f;
+  padding: 36px;
+  border-radius: 22px;
+  text-align: center;
+  width: 360px;
+  box-shadow: 0 0 50px rgba(168,85,247,0.4);
+  position: relative; /* stays perfectly still */
+  z-index: 10;        /* above hearts and sparkles */
+  transform: none;
+}
+
+/* Card subtle glow */
+.card::before {
+  content: "";
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  pointer-events: none;
+  animation: cardTwinkle 2s infinite alternate;
+  border-radius: 25px;
+}
+
+@keyframes cardTwinkle {
+  0% { opacity: 0.1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0.1; }
+}
+
+h2 { margin-top:0; color:#d8b4fe; }
+
+#typewriter { min-height:180px; font-size:14px; line-height:1.65; }
+
+.buttons {
+  margin-top:22px;
+  opacity:0;
+  transition: opacity 1s ease;
+}
+
+.buttons.show { opacity:1; }
+
+.buttons button {
+  margin:8px;
+  padding:14px 36px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:16px;
+  background:#a855f7;
+  color:black;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.3s;
+}
+
+.buttons button:hover {
+  transform:scale(1.1);
+  background:#d8b4fe;
+  box-shadow:0 0 20px #d8b4fe;
+}
+
+/* Container for floating hearts */
+#hearts-container {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  color:#c084fc;
+  font-size:18px;
+  opacity:0.8;
+  pointer-events:none;
+  z-index:0;
+  animation: floatHeart linear infinite, heartGlow 1.5s infinite alternate;
+}
+
+@keyframes floatHeart {
+  0% { transform: translateY(100vh) scale(1); opacity:0.7; }
+  50% { transform: scale(1.2); opacity:1; }
+  100% { transform: translateY(-20vh) scale(1); opacity:0; }
+}
+
+@keyframes heartGlow {
+  0% { text-shadow:0 0 0 #fff; }
+  50% { text-shadow:0 0 8px #fff,0 0 12px #ff9fff; }
+  100% { text-shadow:0 0 0 #fff; }
+}
+
+/* Magical Be My Valentine sparkle */
+.magical {
+  display:inline-block;
+  font-weight:bold;
+  font-size:18px;
+  color:#ff9fff;
+  position:relative;
+}
+
+.magical::after {
+  content:"✨";
+  position:absolute;
+  top:-6px;
+  left:0;
+  font-size:14px;
+  opacity:0;
+  animation:sparkleLetter 1s infinite alternate;
+}
+
+@keyframes sparkleLetter {
+  0% { opacity:0; transform: translateY(0px) scale(0.5); }
+  50% { opacity:1; transform: translateY(-3px) scale(1.2); }
+  100% { opacity:0; transform: translateY(0px) scale(0.5); }
+}
+
+/* Highlight last sentence */
+.highlight {
+  background: rgba(255, 160, 255, 0.3);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #ffccff;
+}
+
+/* Popup */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(20,0,20,0.95);
+  color: #ffe6ff;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 30px #c084fc;
+  z-index: 100;
+  pointer-events: all;
+  transition: transform 0.5s ease;
+}
+
+.popup.show { transform: translate(-50%, -50%) scale(1); }
+
+</style>
+</head>
+<body>
+
+<div id="sparkle-bg"></div>
+<div id="hearts-container"></div>
+
+<div class="card">
+  <h2>Adriana 💜</h2>
+  <div id="typewriter"></div>
+  <div class="buttons" id="buttons">
+    <button onclick="approved()">Yes 😌💜</button>
+  </div>
+</div>
+
+<div class="popup" id="popup">💜 You’re mine now… 💜</div>
+
+<script>
+const text = [
+  "Okay… pause for a second.",
+  "",
+  "Please, I want this moment saved.",
+  "",
+  "I’m not really a Valentine’s Day person.",
+  "But with you, I don’t mind breaking that rule.",
+  "",
+  "You know how it goes.",
+  "Somehow, people always crush on me.",
+  "",
+  "They joke about stealing me.",
+  "Or trying their luck.",
+  "",
+  "You never make it weird.",
+  "You just laugh.",
+  "",
+  "And somehow…",
+  "you still choose me.",
+  "",
+  "That’s my favorite part.",
+  "",
+  "So this is me.",
+  "Being a little bold.",
+  "And very real with you.",
+  "",
+  "Be my Valentine 💜",
+  "",
+  "Just saying…",
+  "I really look good being chosen by you.",
+  "",
+  "I’m all yours, if you want me."
+];
+
+let line=0,char=0;
+const speed=80;
+const target=document.getElementById("typewriter");
+
+function typeWriter() {
+  if(line<text.length){
+    const currentLine=text[line];
+    if(currentLine==="Be my Valentine 💜"){
+      revealWithSparkle(currentLine,()=>{line++; setTimeout(typeWriter,400);});
+      return;
+    }
+    if(char<currentLine.length){
+      target.innerHTML+=currentLine.charAt(char);
+      char++;
+      setTimeout(typeWriter,speed);
+    } else {
+      target.innerHTML+="<br>";
+      char=0;
+      line++;
+      setTimeout(typeWriter,400);
+    }
+  } else {
+    document.getElementById("buttons").classList.add("show");
+  }
+}
+
+function revealWithSparkle(textLine,callback){
+  let i=0;
+  function addChar(){
+    if(i<textLine.length){
+      const charSpan=document.createElement('span');
+      charSpan.textContent=textLine.charAt(i);
+      charSpan.className='magical highlight';
+      target.appendChild(charSpan);
+      i++;
+      setTimeout(addChar,150);
+    } else {
+      target.innerHTML+="<br>";
+      callback();
+    }
+  }
+  addChar();
+}
+
+typeWriter();
+
+function approved(){
+  const popup=document.getElementById("popup");
+  popup.classList.add("show");
+}
+
+// Floating hearts all over screen inside container
+const heartsContainer = document.getElementById("hearts-container");
+setInterval(()=>{
+  const heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="💜";
+  heart.style.fontSize=(14+Math.random()*12)+"px";
+  heart.style.left=Math.random()*(window.innerWidth-30)+"px";
+  heart.style.animationDuration=(6 + Math.random()*5)+"s";
+  heartsContainer.appendChild(heart);
+  setTimeout(()=>heart.remove(),11000);
+},400);
+
+</script>
+</body>
+</html>
